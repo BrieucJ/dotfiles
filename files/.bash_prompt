@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+#COLORS
+reset="\[\e[0m\]"
+red="\[\e[31m\]"
+green="\[\e[32m\]"
+yellow="\[\e[33m\]"
+blue="\[\e[34m\]"
+purple="\[\e[35m\]"
+cyan="\[\e[36m\]"
+
+# GIT FUNCTIONS
+git_branch() {
+    git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+}
+
+# TERMINAL PROMPT
+PS1="$cyan\u$reset"
+[[ $USER == "root" || $SSH_TTY ]] && PS1+=" at $red\h$reset"
+PS1+=" in $red\w$reset"
+PS1+=" \$(git_branch)\n$ "
