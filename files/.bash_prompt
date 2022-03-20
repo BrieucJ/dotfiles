@@ -16,17 +16,22 @@ git_branch() {
 git_status(){
     local git_status="$(git status --porcelain 2> /dev/null)"
     local output
-    local upstream=$(git rev-parse --symbolic-full-name --abbrev-ref @{upstream} 2> /dev/null)
-    local upstream_diff=$(git log --pretty=oneline --topo-order --left-right ${branch}...${upstream} 2> /dev/null)
-    local behind="$(grep -o ">" <<< $upstream_diff | wc -l)"
-    [[ $behind -ne 0 ]] && output+="${behind}↓"
-    local git_status="$(git status --porcelain 2> /dev/null)"
-    local ahead="$(grep -o 'M' <<< $git_status | wc -l)"
-    [[ $ahead -ne 0 ]] && output+="${ahead}↑"
-    local diff="$(grep -o '??' <<< $git_status | wc -l)"
-    [[ $diff -ne 0 ]] && output+="${diff}≠"
-    [ "$behind" -eq "0" ] && [ "$ahead" -eq "0" ] && [ "$diff" -eq "0" ] && output=⚑
-    echo "(${output})" | tr -d ' '
+    if [[ $git_status ]]
+    then
+        local upstream=$(git rev-parse --symbolic-full-name --abbrev-ref @{upstream} 2> /dev/null)
+        local upstream_diff=$(git log --pretty=oneline --topo-order --left-right ${branch}...${upstream} 2> /dev/null)
+        local behind="$(grep -o ">" <<< $upstream_diff | wc -l)"
+        [[ $behind -ne 0 ]] && output+="${behind}↓"
+        local git_status="$(git status --porcelain 2> /dev/null)"
+        local ahead="$(grep -o 'M' <<< $git_status | wc -l)"
+        [[ $ahead -ne 0 ]] && output+="${ahead}↑"
+        local diff="$(grep -o '??' <<< $git_status | wc -l)"
+        [[ $diff -ne 0 ]] && output+="${diff}≠"
+        [ "$behind" -eq "0" ] && [ "$ahead" -eq "0" ] && [ "$diff" -eq "0" ] && output=⚑
+        echo "(${output})" | tr -d ' '
+    else
+        echo ""
+    fi
 }
 
 PS1="$blue\u$reset @" #user
