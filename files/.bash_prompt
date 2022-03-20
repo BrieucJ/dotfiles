@@ -27,7 +27,7 @@ git_status(){
         [[ $ahead -ne 0 ]] && output+="${ahead}↑"
         local diff="$(grep -o '??' <<< $git_status | wc -l)"
         [[ $diff -ne 0 ]] && output+="${diff}≠"
-        [[ $behind -ne 0 ]] && [[ $ahead -ne 0 ]] && [[ $diff -ne 0 ]] && output=⚑
+        [[ $behind == 0 ]] && [[ $ahead == 0 ]] && [[ $diff == 0 ]] && output=⚑
         echo -e "(${output})" | tr -d ' '
     fi
 }
