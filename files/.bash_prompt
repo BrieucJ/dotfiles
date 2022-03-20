@@ -36,7 +36,6 @@ git_status(){
     fi
 }
 
-
 PS1="$blue\u$reset @" #user
 PS1+=" $cyan\w " #working directory
 PS1+="$red\$(git_branch)" #git branch
