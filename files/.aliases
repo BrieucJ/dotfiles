@@ -19,3 +19,6 @@ alias gs="git status"
 alias gd="git diff"
 alias gb="git branch"
 alias gm="git checkout master"
+
+#TMUX
+alias tmux='tmux -u'
