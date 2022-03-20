@@ -18,19 +18,19 @@ git_status(){
     local output
     if [[ $git_status ]]
     then
-    if [ -n "$git_status" ]; then
-        local upstream=$(git rev-parse --symbolic-full-name --abbrev-ref @{upstream} 2> /dev/null)
-        local upstream_diff=$(git log --pretty=oneline --topo-order --left-right ${branch}...${upstream} 2> /dev/null)
-        local behind="$(grep -o ">" <<< $upstream_diff | wc -l)"
-        [[ $behind -ne 0 ]] && output+="${behind}↓"
-        local git_status="$(git status --porcelain 2> /dev/null)"
-        local ahead="$(grep -o 'M' <<< $git_status | wc -l)"
-        [[ $ahead -ne 0 ]] && output+="${ahead}↑"
-        local diff="$(grep -o '??' <<< $git_status | wc -l)"
-        [[ $diff -ne 0 ]] && output+="${diff}≠"
+        if [ -n "$git_status" ]; then
+            local upstream=$(git rev-parse --symbolic-full-name --abbrev-ref @{upstream} 2> /dev/null)
+            local upstream_diff=$(git log --pretty=oneline --topo-order --left-right ${branch}...${upstream} 2> /dev/null)
+            local behind="$(grep -o ">" <<< $upstream_diff | wc -l)"
+            [[ $behind -ne 0 ]] && output+="${behind}↓"
+            local git_status="$(git status --porcelain 2> /dev/null)"
+            local ahead="$(grep -o 'M' <<< $git_status | wc -l)"
+            [[ $ahead -ne 0 ]] && output+="${ahead}↑"
+            local diff="$(grep -o '??' <<< $git_status | wc -l)"
+            [[ $diff -ne 0 ]] && output+="${diff}≠"
+        fi
     else
         output+=⚑
-    fi
     fi
     echo -e "(${output})" | tr -d ' '
 }
