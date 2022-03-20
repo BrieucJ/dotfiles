@@ -28,12 +28,11 @@ git_status(){
         [[ $ahead -ne 0 ]] && output+="${ahead}↑"
         local diff="$(grep -o '??' <<< $git_status | wc -l)"
         [[ $diff -ne 0 ]] && output+="${diff}≠"
-        echo -e "(${output})" | tr -d ' '
     else
         output+=⚑
-        echo -e "(${output})" | tr -d ' '
     fi
     fi
+    echo -e "(${output})" | tr -d ' '
 }
 
 PS1="$blue\u$reset @" #user
