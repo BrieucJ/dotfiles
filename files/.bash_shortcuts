@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+silent() { eval "$@" &>/dev/null; }
+check() { silent command -v $@; }
+
+ssh_launch() {
+  check ssh || return
+  env=~/.ssh/agent.env
+  silent . "$env"
+  silent ssh-add -l
+  state=$? # 0: running  / 1: without key / 2: not-running
+  [[ $state = 2 ]] && umask 077 && ssh-agent > "$env" && silent . "$env"
+  [[ $state = 1 ]] || [[ $state = 2 ]] && silent ssh-add $(file ~/.ssh/* | grep "private key" | awk -F ': |, ' '{print $1}')
+  unset env
+}
+
+tmux_launch() {
+  check tmux || return
+  [[ -z "$TMUX" ]] || return
+  if ! silent tmux has-session -t tmux-1
+  then
+    tmux new-session -d -s tmux-1
+    tmux select-window -t 1
+    tmux split-window -h
+    tmux split-window -v
+    tmux select-pane -t 1.1
+    tmux split-window -v
+    tmux select-pane -t 1.1
+  fi
+  tmux attach-session -t tmux-1
+}
