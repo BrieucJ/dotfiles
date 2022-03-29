@@ -2,6 +2,7 @@
 cp -a ./files/. ~/
 
 #setup git
+git config --global init.defaultBranch master
 git config --global core.excludesfile ~/.gitignore_global
 git config --global user.name "Brieuc Jamain"
 git config --global user.email brieucjamain@gmail.com
