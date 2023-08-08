@@ -15,10 +15,10 @@ git_branch() {
 
 git_status(){
     local is_git="$(git rev-parse --is-inside-work-tree 2> /dev/null)"
-    local git_status="$(git status --porcelain 2> /dev/null)"
     local output
     if [[ $is_git ]]
     then
+        local git_status="$(git status --porcelain 2> /dev/null)"
         local upstream=$(git rev-parse --symbolic-full-name --abbrev-ref @{upstream} 2> /dev/null)
         local upstream_diff=$(git log --pretty=oneline --topo-order --left-right ${branch}...${upstream} 2> /dev/null)
         local behind="$(grep -o ">" <<< $upstream_diff | wc -l)"
